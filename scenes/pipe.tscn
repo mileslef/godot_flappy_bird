@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://b63qq4nvs18k5"]
+
+[ext_resource type="Texture2D" uid="uid://icullkx4y1u6" path="res://sprites/Flappy Bird_pipe.png" id="1_ly5am"]
+[ext_resource type="Script" path="res://scripts/pipe.gd" id="1_uohoo"]
+[ext_resource type="AudioStream" uid="uid://d3prk77pmr8ex" path="res://audio/score.wav" id="3_w2s8i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nn6a2"]
+size = Vector2(22, 248)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xk2j3"]
+size = Vector2(23, 244)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ponmu"]
+a = Vector2(20, 50)
+b = Vector2(20, -50)
+
+[node name="Pipe" type="RigidBody2D" groups=["pipes"]]
+z_index = 10
+gravity_scale = 0.0
+lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_uohoo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ly5am")
+
+[node name="HitArea" type="Area2D" parent="."]
+
+[node name="LowerCollider" type="CollisionShape2D" parent="HitArea"]
+position = Vector2(0, 175)
+shape = SubResource("RectangleShape2D_nn6a2")
+
+[node name="UpperCollider" type="CollisionShape2D" parent="HitArea"]
+position = Vector2(0.5, -178)
+shape = SubResource("RectangleShape2D_xk2j3")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(40, 0)
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="ScoreArea" type="Area2D" parent="."]
+
+[node name="ScoreCollider" type="CollisionShape2D" parent="ScoreArea"]
+shape = SubResource("SegmentShape2D_ponmu")
+
+[node name="ScoreSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_w2s8i")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="HitArea" to="." method="_on_hit_area_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="body_entered" from="ScoreArea" to="." method="_on_score_area_body_entered"]

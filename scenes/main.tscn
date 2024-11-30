@@ -1,0 +1,169 @@
+[gd_scene load_steps=17 format=3 uid="uid://c1dgxcdxlges8"]
+
+[ext_resource type="PackedScene" uid="uid://d1rl6tlnlp6ae" path="res://scenes/player.tscn" id="1_0pcvl"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_4njp4"]
+[ext_resource type="PackedScene" uid="uid://b63qq4nvs18k5" path="res://scenes/pipe.tscn" id="2_l6iws"]
+[ext_resource type="FontFile" uid="uid://2mja3tpshs5h" path="res://fonts/Silkscreen-Regular.ttf" id="3_0hol6"]
+[ext_resource type="Script" path="res://scripts/ground.gd" id="4_0ders"]
+[ext_resource type="PackedScene" uid="uid://5cilghpk3rl6" path="res://scenes/cloud.tscn" id="5_tr2yn"]
+[ext_resource type="Texture2D" uid="uid://cjvyj1lrccqf5" path="res://sprites/ground.png" id="5_txtoo"]
+[ext_resource type="AudioStream" uid="uid://b60ijojvdbwva" path="res://audio/hit.wav" id="6_revp5"]
+[ext_resource type="PackedScene" uid="uid://c51np5jvqvkmx" path="res://scenes/background.tscn" id="6_y2mmu"]
+[ext_resource type="AudioStream" uid="uid://bs5t11oh1ot5c" path="res://audio/tutorial.mp3" id="7_1ocbn"]
+[ext_resource type="PackedScene" uid="uid://2xbxc87o78a6" path="res://scenes/killzone.tscn" id="11_820td"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_73dcl"]
+size = Vector2(32, 32)
+
+[sub_resource type="PackedScene" id="PackedScene_rxo0e"]
+_bundled = {
+"conn_count": 1,
+"conns": PackedInt32Array(3, 0, 12, 11, 2, 0, 0),
+"editable_instances": [],
+"names": PackedStringArray("Ground", "script", "grounds", "Area2D", "Sprite2D", "texture", "CollisionShape2D", "shape", "VisibleOnScreenNotifier2D", "position", "rect", "_on_visible_on_screen_notifier_2d_screen_exited", "screen_exited"),
+"node_count": 4,
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 3, 0, -1, 1, 1, 0, 1, 2, 0, 0, 4, 4, -1, 1, 5, 1, 0, 0, 0, 6, 6, -1, 1, 7, 2, 0, 0, 0, 8, 8, -1, 2, 9, 3, 10, 4, 0),
+"variants": [ExtResource("4_0ders"), ExtResource("5_txtoo"), SubResource("RectangleShape2D_73dcl"), Vector2(-6, -6), Rect2(-10, -10, 32, 32)],
+"version": 3
+}
+
+[sub_resource type="Curve2D" id="Curve2D_4wcog"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 400, 60, 0, 0, 0, 0, 400, 150)
+}
+point_count = 2
+
+[sub_resource type="GDScript" id="GDScript_wffij"]
+script/source = "extends Label
+
+func update_score(score):
+	text = str(\"Score: \", score)
+	
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="Curve2D" id="Curve2D_h0vby"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 450, 20, 0, 0, 0, 0, 450, 200)
+}
+point_count = 2
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_4njp4")
+pipe_scene = ExtResource("2_l6iws")
+cloud_scene = ExtResource("5_tr2yn")
+ground_scene = SubResource("PackedScene_rxo0e")
+
+[node name="Player" parent="." instance=ExtResource("1_0pcvl")]
+top_level = true
+z_index = 12
+position = Vector2(80, 80)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+zoom = Vector2(3, 3)
+
+[node name="Background" parent="Camera2D" instance=ExtResource("6_y2mmu")]
+z_index = 11
+
+[node name="PipeTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="PipeSpawnPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_4wcog")
+
+[node name="PipeSpawnLocation" type="PathFollow2D" parent="PipeSpawnPath"]
+position = Vector2(400, 60)
+rotation = 1.5708
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_right = 90.0
+offset_bottom = 52.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("3_0hol6")
+theme_override_font_sizes/font_size = 40
+text = "Score: 0"
+script = SubResource("GDScript_wffij")
+
+[node name="StartLabel" type="Label" parent="HUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_0hol6")
+theme_override_font_sizes/font_size = 60
+text = "Press [SPACE] to Start"
+
+[node name="GameOverLabel" type="Label" parent="HUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -118.0
+offset_top = -11.5
+offset_right = 118.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_0hol6")
+theme_override_font_sizes/font_size = 60
+text = "Press [SPACE] to retry"
+
+[node name="CloudTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="CloudPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_h0vby")
+
+[node name="CloudSpawnLocation" type="PathFollow2D" parent="CloudPath"]
+position = Vector2(450, 20)
+rotation = 1.5708
+
+[node name="HitSound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(80, 80)
+stream = ExtResource("6_revp5")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_1ocbn")
+volume_db = -10.306
+autoplay = true
+
+[node name="Cloud" parent="." instance=ExtResource("5_tr2yn")]
+position = Vector2(110, 117)
+
+[node name="Cloud2" parent="." instance=ExtResource("5_tr2yn")]
+position = Vector2(265, 54)
+
+[node name="Cloud3" parent="." instance=ExtResource("5_tr2yn")]
+position = Vector2(282, 156)
+
+[node name="Killzone" parent="." instance=ExtResource("11_820td")]
+position = Vector2(-16, 200)
+
+[connection signal="timeout" from="PipeTimer" to="." method="_on_pipe_timer_timeout"]
+[connection signal="timeout" from="CloudTimer" to="." method="_on_cloud_timer_timeout"]
+[connection signal="hit" from="Killzone" to="." method="_on_killzone_hit"]

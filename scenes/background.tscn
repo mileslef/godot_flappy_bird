@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://c51np5jvqvkmx"]
+
+[ext_resource type="Texture2D" uid="uid://cjvyj1lrccqf5" path="res://sprites/ground.png" id="1_1t0ik"]
+[ext_resource type="Script" path="res://scenes/background.gd" id="1_ihhdw"]
+
+[node name="Background" type="Node2D"]
+script = ExtResource("1_ihhdw")
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+repeat_size = Vector2(32, 0)
+autoscroll = Vector2(-100, 0)
+repeat_times = 13
+ignore_camera_scroll = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
+position = Vector2(200, 210)
+texture = ExtResource("1_1t0ik")

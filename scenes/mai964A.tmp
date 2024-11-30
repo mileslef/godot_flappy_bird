@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1dgxcdxlges8"]
+
+[ext_resource type="PackedScene" uid="uid://d1rl6tlnlp6ae" path="res://scenes/player.tscn" id="1_0pcvl"]
+[ext_resource type="PackedScene" uid="uid://b63qq4nvs18k5" path="res://scenes/pipe.tscn" id="2_l6iws"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_0pcvl")]
+position = Vector2(49, 82)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(192, 108)
+zoom = Vector2(3, 3)
+
+[node name="Pipe" parent="." instance=ExtResource("2_l6iws")]
+position = Vector2(152, 68)
+
+[node name="PipeTimer" type="Timer" parent="."]

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://5cilghpk3rl6"]
+
+[ext_resource type="Texture2D" uid="uid://w0hb3tf1ayf3" path="res://sprites/Flappy Bird_cloud.png" id="1_i7ywd"]
+[ext_resource type="Script" path="res://scripts/cloud.gd" id="1_qrdcc"]
+
+[node name="Cloud" type="Node2D" groups=["clouds"]]
+script = ExtResource("1_qrdcc")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_i7ywd")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(26, 0)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

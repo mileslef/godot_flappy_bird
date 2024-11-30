@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1rl6tlnlp6ae"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_iuehk"]
+[ext_resource type="Texture2D" uid="uid://coimjquhu7okr" path="res://sprites/bird_1.png" id="1_p8fj0"]
+[ext_resource type="AudioStream" uid="uid://d13g0tke65cso" path="res://audio/flap.wav" id="3_ls268"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yc0ty"]
+radius = 12.0
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_iuehk")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_p8fj0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_yc0ty")
+
+[node name="Flap" type="AudioStreamPlayer2D" parent="."]
+z_index = 11
+stream = ExtResource("3_ls268")
+
+[node name="FlapTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="FlapTimer" to="." method="_on_flap_timer_timeout"]
